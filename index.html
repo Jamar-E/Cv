@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Code-Style CV</title>
+<style>
+  body {
+    font-family: 'Fira Code', monospace;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+    counter-reset: line;
+  }
+  .line {
+    counter-increment: line;
+    display: flex;
+    animation: fadeIn 0.3s ease forwards;
+    opacity: 0;
+  }
+  .line::before {
+    content: counter(line);
+    display: inline-block;
+    width: 2em;
+    color: #555;
+    user-select: none;
+  }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    background: #d4d4d4;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { background: transparent; } }
+  @keyframes fadeIn { to { opacity: 1; } }
+  .theme-light {
+    background-color: #f5f5f5;
+    color: #1e1e1e;
+  }
+  .theme-light .line::before { color: #aaa; }
+  .editor-header {
+    background: #333;
+    padding: 5px 10px;
+    color: #bbb;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .editor-dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  .red { background: #ff5f56; }
+  .yellow { background: #ffbd2e; }
+  .green { background: #27c93f; }
+  /* Syntax highlighting */
+  .comment { color: #6a9955; }
+  .keyword { color: #569cd6; }
+  .string { color: #d69d85; }
+  .property { color: #9cdcfe; }
+  .clickable { cursor: pointer; text-decoration: underline; color: #4fc3f7; }
+  /* Modal */
+  #modal {
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    background:#1e1e1e;
+    color:#d4d4d4;
+    padding:20px;
+    border-radius:10px;
+    width:80%;
+    max-width:500px;
+    z-index:1000;
+  }
+  .fade-text { opacity: 0; animation: fadeInText 0.5s forwards; }
+  @keyframes fadeInText { to { opacity: 1; } }
+  .Theme-switch {
+  position: relative;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(to right, #8e2de2, #4a00e0);
+  color: ghostwhite;
+  overflow: hidden;
+  height: 37px;
+  padding: 9px;
+  margin: 10px;
+
+}
+
+.Theme-switch svg {
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 0.5em;
+}
+
+.Theme-switch span {
+  position: relative;
+  z-index: 10;
+  transition: color 0.4s;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8em 1.2em 0.8em 1.05em;
+}
+
+.Theme-switch::before,
+.Theme-switch::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.Theme-switch::before {
+  content: "";
+  background: #000;
+  width: 120%;
+  left: -10%;
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.Theme-switch:hover::before {
+  transform: translate3d(100%, 0, 0);
+}
+
+.Theme-switch:active {
+  transform: scale(0.95);
+}
+
+</style>
+</head>
+<body>
+
+<div class="editor-header">
+  <div class="editor-dot red"></div>
+  <div class="editor-dot yellow"></div>
+  <div class="editor-dot green"></div>
+  Jamar Edwards
+</div>
+<div id="cv"></div>
+
+<div class="editor-header">
+  <div class="editor-dot red"></div>
+  <div class="editor-dot yellow"></div>
+  <div class="editor-dot green"></div>
+  Skills.js
+</div>
+<div id="skills"></div>
+
+<div class="editor-header">
+  <div class="editor-dot red"></div>
+  <div class="editor-dot yellow"></div>
+  <div class="editor-dot green"></div>
+  Experience.css
+</div>
+<div id="experience"></div>
+
+<div class="editor-header">
+  <div class="editor-dot red"></div>
+  <div class="editor-dot yellow"></div>
+  <div class="editor-dot green"></div>
+  Current_Projects.js
+</div>
+<div id="projects"></div>
+
+<!-- Modal -->
+<div id="modal">
+  <div id="modal-content" class="fade-text"></div>
+  <button id="modal-close" style="margin-top:15px; padding:5px 10px; cursor:pointer;">Close</button>
+</div>
+
+<button id="themeToggle" class="Theme-switch">Toggle Theme</button>
+
+<script>
+const sections = {
+  personalInfo: [
+    '<span class="comment">// === Personal Information ===</span>',
+    '<span class="keyword">const</span> name = <span class="string">"Jamar Edwards"</span>;',
+    '<span class="keyword">const</span> role = <span class="string">"Junior Web Developer"</span>;',
+    '<span class="keyword">const</span> location = <span class="string">"West Midlands, UK"</span>;'
+  ],
+  skills: [
+    '<span class="comment">// === Skills ===</span>',
+    '<span class="keyword">const</span> skills = [<span class="string">"HTML"</span>, <span class="string">"CSS"</span>, <span class="string">"JavaScript"</span>, <span class="string">"jQuery"</span>, <span class="string">"WordPress"</span>];'
+  ],
+  experience: [
+    '<span class="comment">// === Experience ===</span>',
+    '<span class="comment">/* Customer Service Representative / IT Technician */</span>',
+    '.Customer_Service_Representative_IT_Technician {',
+    '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">" K&J Hair Studio"</span>;',
+    '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">2023</span>;',
+    '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Provided front-line tech support, troubleshooting, and customer assistance."</span>;',
+    '}',
+    '<span class="comment">/* Customer Service / Driver Support */</span>',
+    '.Customer_Service_Driver_Support {',
+    '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">"XPERT Delivery."</span>;',
+    '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">2023</span>;',
+    '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Supported logistics operations, ensuring clear communication between drivers and clients."</span>;',
+    '}',
+    '<span class="comment">/* Pensions Professional */</span>',
+    '.Pensions_Professional {',
+    '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">"Phoenix Reassure"</span>;',
+    '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">2022</span>;',
+    '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Managed client pension queries, ensuring compliance and accurate record-keeping."</span>;',
+    '}',
+    '<span class="comment">/* Web Developer / Project Manager Intern */</span>',
+    '.Web_Developer_Project_Manager_Intern {',
+    '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">"StudioRav"</span>;',
+    '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">2023</span>;',
+    '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Built responsive websites and coordinated project deliverables using WordPress and JavaScript."</span>;',
+    '}'
+  ]
+};
+
+// Typewriter function
+function typeLines(containerId, lines) {
+  let i = 0;
+  function typeLine() {
+    if (i < lines.length) {
+      const div = document.createElement('div');
+      div.className = 'line';
+      div.innerHTML = lines[i];
+      document.getElementById(containerId).appendChild(div);
+      i++;
+      setTimeout(typeLine, 300);
+    }
+  }
+  typeLine();
+}
+
+typeLines('cv', sections.personalInfo);
+setTimeout(() => typeLines('skills', sections.skills), 1200);
+setTimeout(() => typeLines('experience', sections.experience), 2400);
+
+// Current Projects
+const projects = [
+  { 
+    name: "OH7 AI Assistant", 
+    description: "A sassy modular AI companion for home automation, Twitch streaming, and personal tasks. Designed to integrate with laptops, routers, and ESP projects for intelligent interactions." 
+  },
+  { 
+    name: "ESP32 WiFi & Bluetooth Sniffer", 
+    description: "Advanced network sniffer using ESP32 that scans for nearby WiFi & Bluetooth devices, capturing SSIDs, MAC addresses, probe requests, and handshakes for analysis." 
+  }
+];
+
+const projectsContainer = document.getElementById('projects');
+const modal = document.getElementById('modal');
+const modalContent = document.getElementById('modal-content');
+const modalClose = document.getElementById('modal-close');
+
+projects.forEach(proj => {
+  const div = document.createElement('div');
+  div.className = 'line';
+  div.innerHTML = `<span class="keyword">Project:</span> <span class="string clickable">${proj.name}</span>`;
+  projectsContainer.appendChild(div);
+
+  div.querySelector('.clickable').addEventListener('click', () => {
+    modalContent.classList.remove('fade-text'); // reset animation
+    void modalContent.offsetWidth; // trigger reflow
+    modalContent.classList.add('fade-text'); // animate
+    modalContent.innerHTML = `<strong>${proj.name}</strong><p>${proj.description}</p>`;
+    modal.style.display = 'block';
+  });
+});
+
+modalClose.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  document.body.classList.toggle('theme-light');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key.toLowerCase() === 'k') {
+    alert('Command Palette: Search for anything in this CV...');
+  }
+});
+
+console.log("Thanks for reading!");
+</script>
+</body>
+</html>
