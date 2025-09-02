@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel = "stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 <title>Jamar Edwards Junior Dev</title>
 </head>
   
@@ -54,7 +54,10 @@
   <button id="modal-close" style="margin-top:15px; padding:5px 10px; cursor:pointer;">Close</button>
 </div>
 
+<!-- Theme + Skip buttons -->
 <button id="themeToggle" class="Theme-switch">Toggle Theme</button>
+<button id="skipAnimation" class="skip-btn">Skip Animation</button>
+
 <div class="editor-header" style="margin-top: 40px;">
   <span style="color:#6a9955;">
     // This CV is also available in an interactive format, with theme switching and clickable projects.
@@ -104,10 +107,21 @@ const sections = {
   ]
 };
 
+let skipAnimation = false;
+
 // Typewriter function
 function typeLines(containerId, lines) {
   let i = 0;
   function typeLine() {
+    if (skipAnimation) {
+      for (; i < lines.length; i++) {
+        const div = document.createElement('div');
+        div.className = 'line';
+        div.innerHTML = lines[i];
+        document.getElementById(containerId).appendChild(div);
+      }
+      return;
+    }
     if (i < lines.length) {
       const div = document.createElement('div');
       div.className = 'line';
@@ -133,13 +147,12 @@ setTimeout(() => {
 
     document.getElementById('courses').appendChild(div);
 
-    // Make it interactive → open modal
     div.querySelector('.clickable').addEventListener('click', () => {
       modalContent.classList.remove('fade-text'); 
       void modalContent.offsetWidth; 
       modalContent.classList.add('fade-text'); 
       modalContent.innerHTML = `<strong>${course.name}</strong><br><strong>${course.date}</strong><p>${course.description}</p>`;
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
     });
   });
 }, 4200);
@@ -191,11 +204,11 @@ projects.forEach(proj => {
   projectsContainer.appendChild(div);
 
   div.querySelector('.clickable').addEventListener('click', () => {
-    modalContent.classList.remove('fade-text'); // reset animation
-    void modalContent.offsetWidth; // trigger reflow
-    modalContent.classList.add('fade-text'); // animate
+    modalContent.classList.remove('fade-text');
+    void modalContent.offsetWidth;
+    modalContent.classList.add('fade-text');
     modalContent.innerHTML = `<strong>${proj.name}</strong><p>${proj.description}</p>`;
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
   });
 });
 
@@ -205,6 +218,49 @@ modalClose.addEventListener('click', () => {
 
 document.getElementById('themeToggle').addEventListener('click', () => {
   document.body.classList.toggle('theme-light');
+});
+
+// Skip button handler
+document.getElementById('skipAnimation').addEventListener('click', () => {
+  skipAnimation = true;
+
+  // Render everything instantly
+  document.getElementById('cv').innerHTML = sections.personalInfo.join('<br>');
+  document.getElementById('skills').innerHTML = sections.skills.join('<br>');
+  document.getElementById('experience').innerHTML = sections.experience.join('<br>');
+
+  // Courses
+  document.getElementById('courses').innerHTML = '';
+  courses.forEach(course => {
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.innerHTML =
+      `<span class="property">"${course.name}"</span>: 
+       <span class="string clickable">"Click for details"</span>,`;
+    document.getElementById('courses').appendChild(div);
+
+    div.querySelector('.clickable').addEventListener('click', () => {
+      modalContent.innerHTML = `<strong>${course.name}</strong><br><strong>${course.date}</strong><p>${course.description}</p>`;
+      modal.style.display = 'flex';
+    });
+  });
+
+  // Projects
+  document.getElementById('projects').innerHTML = '';
+  projects.forEach(proj => {
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.innerHTML = `<span class="keyword">Project:</span> <span class="string clickable">${proj.name}</span>`;
+    projectsContainer.appendChild(div);
+
+    div.querySelector('.clickable').addEventListener('click', () => {
+      modalContent.innerHTML = `<strong>${proj.name}</strong><p>${proj.description}</p>`;
+      modal.style.display = 'flex';
+    });
+  });
+
+  // Hide skip button after use
+  document.getElementById('skipAnimation').style.display = 'none';
 });
 
 document.addEventListener('keydown', (e) => {
