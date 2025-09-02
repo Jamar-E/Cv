@@ -108,6 +108,7 @@ const sections = {
 };
 
 let skipAnimation = false;
+let timeouts = []; // store timeout IDs
 
 // Typewriter function
 function typeLines(containerId, lines) {
@@ -128,16 +129,16 @@ function typeLines(containerId, lines) {
       div.innerHTML = lines[i];
       document.getElementById(containerId).appendChild(div);
       i++;
-      setTimeout(typeLine, 300);
+      timeouts.push(setTimeout(typeLine, 300));
     }
   }
   typeLine();
 }
 
 typeLines('cv', sections.personalInfo);
-setTimeout(() => typeLines('skills', sections.skills), 1200);
-setTimeout(() => typeLines('experience', sections.experience), 2400);
-setTimeout(() => {
+timeouts.push(setTimeout(() => typeLines('skills', sections.skills), 1200));
+timeouts.push(setTimeout(() => typeLines('experience', sections.experience), 2400));
+timeouts.push(setTimeout(() => {
   courses.forEach(course => {
     const div = document.createElement('div');
     div.className = 'line';
@@ -155,7 +156,7 @@ setTimeout(() => {
       modal.style.display = 'flex';
     });
   });
-}, 4200);
+}, 4200));
 
 // Current Projects
 const projects = [
@@ -224,12 +225,38 @@ document.getElementById('themeToggle').addEventListener('click', () => {
 document.getElementById('skipAnimation').addEventListener('click', () => {
   skipAnimation = true;
 
-  // Render everything instantly
-  document.getElementById('cv').innerHTML = sections.personalInfo.join('<br>');
-  document.getElementById('skills').innerHTML = sections.skills.join('<br>');
-  document.getElementById('experience').innerHTML = sections.experience.join('<br>');
+  // Stop scheduled typewriter
+  timeouts.forEach(id => clearTimeout(id));
+  timeouts = [];
 
-  // Courses
+  // Render Personal Info
+  document.getElementById('cv').innerHTML = '';
+  sections.personalInfo.forEach(line => {
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.innerHTML = line;
+    document.getElementById('cv').appendChild(div);
+  });
+
+  // Render Skills
+  document.getElementById('skills').innerHTML = '';
+  sections.skills.forEach(line => {
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.innerHTML = line;
+    document.getElementById('skills').appendChild(div);
+  });
+
+  // Render Experience
+  document.getElementById('experience').innerHTML = '';
+  sections.experience.forEach(line => {
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.innerHTML = line;
+    document.getElementById('experience').appendChild(div);
+  });
+
+  // Render Courses
   document.getElementById('courses').innerHTML = '';
   courses.forEach(course => {
     const div = document.createElement('div');
@@ -245,7 +272,7 @@ document.getElementById('skipAnimation').addEventListener('click', () => {
     });
   });
 
-  // Projects
+  // Render Projects
   document.getElementById('projects').innerHTML = '';
   projects.forEach(proj => {
     const div = document.createElement('div');
