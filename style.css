@@ -194,3 +194,7 @@
  button:active {
    transform: scale(0.95);
  }
+
+ a {
+   color: #4fc3f7;
+ }
