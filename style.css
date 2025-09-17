@@ -103,6 +103,11 @@
    color: #4fc3f7;
  }
 
+ /* hover-comment */
+ .hover-comment {
+   padding-left: 38px;
+ }
+
  /* Modal */
  #modal {
    display: none;

@@ -15,17 +15,17 @@
     <div class="editor-dot green"></div>
     Jamar Edwards
   </div>
+  <div id="cv"></div>
   <!-- Cover Letter -->
   <div class="editor-header">
     <div class="editor-dot red"></div>
     <div class="editor-dot yellow"></div>
     <div class="editor-dot green"></div>
-    CoverLetter.md terstasdassda
+    <h3></h3>&lt;button class="hidden" style="border-top:2px; solid #fff;"&gt; CoverLetter &lt;button&gt;
   </div>
-
-  <button id="toggleCoverLetter" class="Theme-switch">📄 View Cover Letter</button>
+  <div class="comment hover-comment">/* Hover here */</div>
+  <button id="toggleCoverLetter" class=""> View Cover Letter</button>
   <div id="coverLetter" style="display:none; margin-top:10px;"></div>
-  <div id="cv"></div>
   <!-- Skills -->
   <div class="editor-header">
     <div class="editor-dot red"></div><!-- icons -->
@@ -66,7 +66,7 @@
   </div>
 
   <!-- Theme + Skip buttons -->
-  <button id="themeToggle" class="Theme-switch">Toggle Theme</button>
+  <button id="themeToggle" class="">Toggle Theme</button>
   <button id="skipAnimation" class="skip-btn">Skip Animation</button>
 
   <script>
@@ -201,6 +201,48 @@
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('modal-content');
     const modalClose = document.getElementById('modal-close');
+    const coverLetterLines = [
+      '<span class="comment"># Cover Letter</span>',
+      'Dear Hiring Manager,',
+      '',
+      'I am writing to apply for the <span class="string">Software Developer Apprentice</span> position at The Studio 4, as advertised through QA Apprenticeships.',
+      'With a strong foundation in front-end web development and hands-on experience using <span class="string">HTML, CSS, JavaScript, and WordPress</span>,',
+      'I am eager to contribute to your team while further developing my skills through this apprenticeship.',
+      '',
+      'During my internship with StudioRav, I built responsive websites and implemented functionality with WordPress and JavaScript.',
+      'This gave me confidence in turning designs into working solutions while meeting client needs.',
+      'My customer service background strengthened my <span class="property">communication skills</span>,',
+      'which helps me explain technical ideas to non-technical audiences.',
+      '',
+      'Beyond technical skills, I bring curiosity and adaptability. Projects such as an <span class="string">AI Assistant (OH7)</span>',
+      'and an <span class="string">ESP32 WiFi/Bluetooth sniffer</span> reflect my drive to explore new technologies.',
+      'I am also keen to expand into PHP and frameworks like Laravel, which I understand are valuable at The Studio 4.',
+      '',
+      'Thank you for considering my application. I would welcome the chance to discuss how I can contribute to your team.',
+      '',
+      'Yours sincerely,',
+      '<span class="string">Jamar Edwards</span>'
+    ];
+
+    document.getElementById("toggleCoverLetter").addEventListener("click", () => {
+      const container = document.getElementById("coverLetter");
+      container.innerHTML = ""; // reset
+
+      if (container.style.display === "none") {
+        coverLetterLines.forEach(line => {
+          const div = document.createElement("div");
+          div.className = "line";
+          div.innerHTML = line;
+          container.appendChild(div);
+        });
+        container.style.display = "block";
+        document.getElementById("toggleCoverLetter").innerText = "❌ Hide Cover Letter";
+      } else {
+        container.style.display = "none";
+        document.getElementById("toggleCoverLetter").innerText = "View Cover Letter";
+      }
+    });
+
 
     projects.forEach(proj => {
       const div = document.createElement('div');
