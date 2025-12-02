@@ -1,55 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
   <title>Jamar Edwards Junior Dev</title>
 </head>
 
 <body>
-  <div class="editor-header">
-    <div class="editor-dot red"></div> <!-- icons -->
-    <div class="editor-dot yellow"></div>
-    <div class="editor-dot green"></div>
-    Jamar Edwards
+  <!-- Top-right controls -->
+  <div class="top-controls">
+    <button id="themeToggle" class="control-btn">Theme</button>
+    <button id="skipAnimation" class="control-btn">Skip Animation</button>
   </div>
-  <div id="cv"></div>
-  <!-- Cover Letter -->
+
+  <!-- Main header -->
   <div class="editor-header">
     <div class="editor-dot red"></div>
     <div class="editor-dot yellow"></div>
     <div class="editor-dot green"></div>
-    <h3></h3>&lt;button class="hidden" style="border-top: 2px solid #fff;"&gt; CoverLetter &lt;button&gt;
+    Jamar Edwards
   </div>
-  <div class="comment hover-comment">/* Hover here */</div>
-  <button id="toggleCoverLetter" class=""> View Cover Letter</button>
-  <div id="coverLetter" style="display:none; margin-top:10px;"></div>
+
+  <div id="cv"></div>
+
   <!-- Skills -->
   <div class="editor-header">
-    <div class="editor-dot red"></div><!-- icons -->
+    <div class="editor-dot red"></div>
     <div class="editor-dot yellow"></div>
     <div class="editor-dot green"></div>
     Skills.js
   </div>
   <div id="skills"></div>
+
+  <!-- Cover Letter trigger + floating panel -->
+  <div class="editor-header cover-header">
+    <div class="editor-dot red"></div>
+    <div class="editor-dot yellow"></div>
+    <div class="editor-dot green"></div>
+    CoverLetter.md
+    <div class="cover-hover-zone"></div>
+  </div>
+
+  <div id="coverPanel" class="cover-panel">
+    <div class="cover-panel-header">
+      <button id="hideCover" class="cover-close">✕ Hide Cover Letter</button>
+    </div>
+    <div id="coverContent" class="cover-body markdown"></div>
+  </div>
+
   <!-- Experience -->
   <div class="editor-header">
-    <div class="editor-dot red"></div><!-- icons -->
+    <div class="editor-dot red"></div>
     <div class="editor-dot yellow"></div>
     <div class="editor-dot green"></div>
     Experience.css
   </div>
   <div id="experience"></div>
+
   <!-- Projects -->
   <div class="editor-header">
-    <div class="editor-dot red"></div> <!-- icons -->
+    <div class="editor-dot red"></div>
     <div class="editor-dot yellow"></div>
     <div class="editor-dot green"></div>
     Current_Projects.js
   </div>
   <div id="projects"></div>
+
   <!-- Courses -->
   <div class="editor-header">
     <div class="editor-dot red"></div>
@@ -57,66 +74,88 @@
     <div class="editor-dot green"></div>
     Courses.json
   </div>
-
   <div id="courses"></div>
+
   <!-- Modal -->
   <div id="modal">
     <div id="modal-content" class="fade-text"></div>
     <button id="modal-close" style="margin-top:15px; padding:5px 10px; cursor:pointer;">Close</button>
   </div>
 
-  <!-- Theme + Skip buttons -->
-  <button id="themeToggle" class="">Toggle Theme</button>
-  <button id="skipAnimation" class="skip-btn">Skip Animation</button>
+  <!-- Footer note -->
+  <div class="editor-header" style="margin-top: 40px;">
+    <span style="color:#6a9955;">
+      // Interactive version available at:
+      <a href="https://jamar-e.github.io/Cv/" style="color:#4fc3f7;" target="_blank">
+        jamar-e.github.io/Cv
+      </a>
+    </span>
+  </div>
 
   <script>
+    // ========== CV CONTENT ==========
     const sections = {
       personalInfo: [
         '<span class="comment">// === Personal Information ===</span>',
-        '<span class="keyword">const</span>&nbsp; name = <span class="string">"Jamar Edwards"</span>;',
-        '<span class="keyword">const</span>&nbsp; role = <span class="string">"Junior Web Developer"</span>;',
-        '<span class="keyword">const</span>&nbsp; location = <span class="string">"West Midlands, UK"</span>;'
+        '<span class="keyword">const</span> name = <span class="string">"Jamar Edwards"</span>;',
+        '<span class="keyword">const</span> role = <span class="string">"Junior Web Developer"</span>;',
+        '<span class="keyword">const</span> location = <span class="string">"Birmingham, West Midlands, UK"</span>;'
       ],
+
       skills: [
         '<span class="comment">// === Skills ===</span>',
-        '<span class="keyword">const</span>&nbsp; skills = [<span class="string">"HTML"</span>, <span class="string">"CSS"</span>, <span class="string">"JavaScript"</span>, <span class="string">"jQuery"</span>, <span class="string">"WordPress"</span>];'
+        '<span class="keyword">const</span> skills = [<span class="string">"HTML"</span>, <span class="string">"CSS"</span>, <span class="string">"JavaScript"</span>, <span class="string">"jQuery"</span>, <span class="string">"WordPress"</span>];'
       ],
+
       experience: [
         '<span class="comment">// === Experience ===</span>',
+
+        '<span class="comment">/* Personal Development & Freelance Projects */</span>',
+        '.Personal_Development_2024_2025 {',
+        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">"02/2024 – 02/2025"</span>;',
+        '&nbsp;&nbsp;<span class="property">focus</span>: <span class="string">"Strengthened front-end dev, WordPress, UI/UX, Photoshop/Illustrator."</span>;',
+        '&nbsp;&nbsp;<span class="property">projects</span>: <span class="string">"Built portfolio sites, prototypes, client-style mockups."</span>;',
+        '&nbsp;&nbsp;<span class="property">tools</span>: <span class="string">"VS Code, GitHub, WordPress, Photoshop, Illustrator, Figma"</span>;',
+        '&nbsp;&nbsp;<span class="property">result</span>: <span class="string">"Improved design confidence & real-world readiness."</span>;',
+        '}',
+
         '<span class="comment">/* Customer Service Representative / IT Technician */</span>',
         '.Customer_Service_Representative_IT_Technician {',
-        '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">" K&J Hair Studio"</span>;',
-        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">08/2024 - 08/2025 </span>;',
-        '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Provided front-line tech support, troubleshooting, and customer assistance."</span>;',
+        '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">"K&J Hair Studio"</span>;',
+        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">"08/2024 – 08/2025"</span>;',
+        '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Provided tech support and customer assistance."</span>;',
         '}',
+
         '<span class="comment">/* Customer Service / Driver Support */</span>',
         '.Customer_Service_Driver_Support {',
-        '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">"XPERT Delivery."</span>;',
-        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">03/2024 - 07/2024 </span>;',
-        '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Supported logistics operations, ensuring clear communication between drivers and clients."</span>;',
+        '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">"XPERT Delivery"</span>;',
+        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">"03/2024 – 07/2024"</span>;',
+        '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Supported logistics operations & driver communication."</span>;',
         '}',
+
         '<span class="comment">/* Web Developer / Project Manager Intern */</span>',
         '.Web_Developer_Project_Manager_Intern {',
         '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">"StudioRav"</span>;',
-        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string"> 09/2023-01/2024 </span>;',
-        '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Built responsive websites using WordPress and coordinated with a team of devs to deliver a web app project launch."</span>;',
+        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">"09/2023 – 01/2024"</span>;',
+        '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Built WordPress sites and coordinated project deliverables."</span>;',
         '}',
+
         '<span class="comment">/* Pensions Professional */</span>',
         '.Pensions_Professional {',
         '&nbsp;&nbsp;<span class="property">company</span>: <span class="string">"Phoenix Reassure"</span>;',
-        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string"> 09/2022 - 09/2023 </span>;',
-        '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Managed client pension queries, ensuring compliance and accurate record-keeping."</span>;',
+        '&nbsp;&nbsp;<span class="property">year</span>: <span class="string">"09/2022 – 09/2023"</span>;',
+        '&nbsp;&nbsp;<span class="property">description</span>: <span class="string">"Managed client pension queries & documentation."</span>;',
         '}'
       ]
     };
 
+    // ==== TYPEWRITER ANIMATION ====
     let skipAnimation = false;
-    let timeouts = []; // store timeout IDs
+    let timeouts = [];
 
-    // Typewriter function
     function typeLines(containerId, lines) {
       let i = 0;
-      function typeLine() {
+      function type() {
         if (skipAnimation) {
           for (; i < lines.length; i++) {
             const div = document.createElement('div');
@@ -132,118 +171,100 @@
           div.innerHTML = lines[i];
           document.getElementById(containerId).appendChild(div);
           i++;
-          timeouts.push(setTimeout(typeLine, 300));
+          timeouts.push(setTimeout(type, 300));
         }
       }
-      typeLine();
+      type();
     }
 
-    typeLines('cv', sections.personalInfo);
-    timeouts.push(setTimeout(() => typeLines('skills', sections.skills), 1200));
-    timeouts.push(setTimeout(() => typeLines('experience', sections.experience), 2400));
-    timeouts.push(setTimeout(() => {
-      courses.forEach(course => {
-        const div = document.createElement('div');
-        div.className = 'line';
-        div.innerHTML =
-          `<span class="property">"${course.name}"</span>: 
-       <span class="string clickable">"Click for details"</span>,`;
+    function renderAllImmediately() {
+      skipAnimation = true;
+      timeouts.forEach(id => clearTimeout(id));
+      timeouts = [];
 
-        document.getElementById('courses').appendChild(div);
+      const mapping = [
+        { id: 'cv', data: sections.personalInfo },
+        { id: 'skills', data: sections.skills },
+        { id: 'experience', data: sections.experience }
+      ];
 
-        div.querySelector('.clickable').addEventListener('click', () => {
-          modalContent.classList.remove('fade-text');
-          void modalContent.offsetWidth;
-          modalContent.classList.add('fade-text');
-          modalContent.innerHTML = `<strong>${course.name}</strong><br><strong>${course.date}</strong><p>${course.description}</p>`;
-          modal.style.display = 'flex';
+      mapping.forEach(({ id, data }) => {
+        const el = document.getElementById(id);
+        el.innerHTML = '';
+        data.forEach(line => {
+          const div = document.createElement('div');
+          div.className = 'line';
+          div.innerHTML = line;
+          el.appendChild(div);
         });
       });
-    }, 4200));
+    }
 
-    // Current Projects
+    // Start animations
+    typeLines('cv', sections.personalInfo);
+    setTimeout(() => typeLines('skills', sections.skills), 1200);
+    setTimeout(() => typeLines('experience', sections.experience), 2400);
+
+    // ==== COVER LETTER FLOATING PANEL ====
+    const coverPanel = document.getElementById('coverPanel');
+    const coverContent = document.getElementById('coverContent');
+    const hideCover = document.getElementById('hideCover');
+    const hoverZone = document.querySelector('.cover-hover-zone');
+
+    // Inject markdown-style cover letter
+    coverContent.innerHTML = `
+# Cover Letter
+
+Dear Hiring Manager,
+
+I am writing to apply for the **Junior Web Designer / Developer** role at Chameleon Web Services. With a strong foundation in front-end web development and hands-on experience using **HTML, CSS, JavaScript, and WordPress**, I am eager to contribute while continuing to grow.
+
+During my internship with StudioRav, I built responsive websites and implemented features using WordPress and JavaScript. This gave me confidence in turning designs into working solutions for clients.
+
+My customer service background strengthened my **communication skills**, which helps me explain technical ideas clearly to non-technical audiences.
+
+Beyond technical skills, I bring curiosity and adaptability. Projects such as my **AI Assistant (OH7)** and an **ESP32 WiFi/Bluetooth sniffer** reflect my drive to explore new technologies and learn independently.
+
+Thank you for considering my application. I would welcome the chance to discuss how I can contribute to your team.
+
+Yours sincerely,  
+**Jamar Edwards**
+`;
+
+    // Show on hover (easter egg)
+    hoverZone.addEventListener('mouseenter', () => {
+      coverPanel.style.display = 'block';
+    });
+
+    // Hide on click
+    hideCover.addEventListener('click', () => {
+      coverPanel.style.display = 'none';
+    });
+
+    // ==== THEME TOGGLE ====
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('theme-light');
+    });
+
+    // ==== SKIP ANIMATION ====
+    document.getElementById('skipAnimation').addEventListener('click', () => {
+      renderAllImmediately();
+    });
+
+    // ==== MODAL HANDLING ====
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modal-content');
+    document.getElementById('modal-close').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    // ==== PROJECTS ====
     const projects = [
-      {
-        name: "OH7 AI Assistant",
-        description: "A sassy modular AI companion for home automation, Twitch streaming, and personal tasks. Designed to integrate with laptops, routers, and ESP projects for intelligent interactions."
-      },
-      {
-        name: "ESP32 WiFi & Bluetooth Sniffer",
-        description: "Advanced network sniffer using ESP32 that scans for nearby WiFi & Bluetooth devices, capturing SSIDs, MAC addresses, probe requests, and handshakes for analysis."
-      }
-    ];
-
-    const courses = [
-      {
-        name: "L3 Extended Diploma in ICT Systems and Principles",
-        description: `I developed practical skills in networking, software development, and IT support.
-        I also gained advanced knowledge in computer systems, databases, and IT project management.`,
-        date: "2014 – 2016",
-      },
-      {
-        name: "Level 2 functional skills English, ICT, and Maths",
-        description: `Achieved Level 2 Functional Skills qualifications in English, ICT, and Maths, demonstrating strong core competencies.
-                  Strengthened practical problem-solving and communication skills through accredited Functional Skills qualifications.
-                  Gained recognised certifications in English, ICT, and Maths at Level 2, supporting both technical and workplace readiness.`,
-        date: "2014 – 2016",
-      },
-
-      {
-        name: "GCSE Maths English and Science (Grade 4)",
-        description: `Completed my GCSEs with a focus on Maths, English, and Science, 
-                  achieving Grade 4 in each subject. 
-                  <br>This foundation has been crucial for my further studies and career in IT.`,
-        date: "2014 – 2016",
-      }
+      { name: 'OH7 AI Assistant', description: 'AI companion for automation, Twitch overlays, and playful interactions.' },
+      { name: 'ESP32 WiFi Sniffer', description: 'Scans nearby networks, SSIDs, MACs and probe requests for analysis.' }
     ];
 
     const projectsContainer = document.getElementById('projects');
-    const modal = document.getElementById('modal');
-    const modalContent = document.getElementById('modal-content');
-    const modalClose = document.getElementById('modal-close');
-    const coverLetterLines = [
-      '<span class="comment"># Cover Letter</span>',
-      'Dear Hiring Manager,',
-      '',
-      'I am writing to apply for the <span class="string">Software Developer Apprentice</span> position at The Studio 4, as advertised through QA Apprenticeships.',
-      'With a strong foundation in front-end web development and hands-on experience using <span class="string">HTML, CSS, JavaScript, and WordPress</span>,',
-      'I am eager to contribute to your team while further developing my skills through this apprenticeship.',
-      '',
-      'During my internship with StudioRav, I built responsive websites and implemented functionality with WordPress and JavaScript.',
-      'This gave me confidence in turning designs into working solutions while meeting client needs.',
-      'My customer service background strengthened my <span class="property">communication skills</span>,',
-      'which helps me explain technical ideas to non-technical audiences.',
-      '',
-      'Beyond technical skills, I bring curiosity and adaptability. Projects such as an <span class="string">AI Assistant (OH7)</span>',
-      'and an <span class="string">ESP32 WiFi/Bluetooth sniffer</span> reflect my drive to explore new technologies.',
-      'I am also keen to expand into PHP and frameworks like Laravel, which I understand are valuable at The Studio 4.',
-      '',
-      'Thank you for considering my application. I would welcome the chance to discuss how I can contribute to your team.',
-      '',
-      'Yours sincerely,',
-      '<span class="string">Jamar Edwards</span>'
-    ];
-
-    document.getElementById("toggleCoverLetter").addEventListener("click", () => {
-      const container = document.getElementById("coverLetter");
-      container.innerHTML = ""; // reset
-
-      if (container.style.display === "none") {
-        coverLetterLines.forEach(line => {
-          const div = document.createElement("div");
-          div.className = "line";
-          div.innerHTML = line;
-          container.appendChild(div);
-        });
-        container.style.display = "block";
-        document.getElementById("toggleCoverLetter").innerText = "❌ Hide Cover Letter";
-      } else {
-        container.style.display = "none";
-        document.getElementById("toggleCoverLetter").innerText = "View Cover Letter";
-      }
-    });
-
-
     projects.forEach(proj => {
       const div = document.createElement('div');
       div.className = 'line';
@@ -251,99 +272,32 @@
       projectsContainer.appendChild(div);
 
       div.querySelector('.clickable').addEventListener('click', () => {
-        modalContent.classList.remove('fade-text');
-        void modalContent.offsetWidth;
-        modalContent.classList.add('fade-text');
         modalContent.innerHTML = `<strong>${proj.name}</strong><p>${proj.description}</p>`;
         modal.style.display = 'flex';
       });
     });
 
-    modalClose.addEventListener('click', () => {
-      modal.style.display = 'none';
+    // ==== COURSES ====
+    const courses = [
+      { name: 'L3 Extended Diploma in ICT Systems and Principles', desc: 'Developed networking, development and IT support fundamentals.', date: '2014 – 2016' },
+      { name: 'Functional Skills Level 2 (English, Maths, ICT)', desc: 'Strengthened practical communication and problem-solving skills.', date: '2014 – 2016' },
+      { name: 'GCSE Maths, English, Science (Grade 4)', desc: 'Core academic foundation for further IT study.', date: '2014 – 2016' }
+    ];
+
+    const coursesContainer = document.getElementById('courses');
+    courses.forEach(course => {
+      const div = document.createElement('div');
+      div.className = 'line';
+      div.innerHTML = `<span class="property">"${course.name}"</span>: <span class="string clickable">"Click for details"</span>,`;
+      coursesContainer.appendChild(div);
+
+      div.querySelector('.clickable').addEventListener('click', () => {
+        modalContent.innerHTML = `<strong>${course.name}</strong><br><strong>${course.date}</strong><p>${course.desc}</p>`;
+        modal.style.display = 'flex';
+      });
     });
 
-    document.getElementById('themeToggle').addEventListener('click', () => {
-      document.body.classList.toggle('theme-light');
-    });
-
-    // Skip button handler
-    document.getElementById('skipAnimation').addEventListener('click', () => {
-      skipAnimation = true;
-
-      // Stop scheduled typewriter
-      timeouts.forEach(id => clearTimeout(id));
-      timeouts = [];
-
-      // Render Personal Info
-      document.getElementById('cv').innerHTML = '';
-      sections.personalInfo.forEach(line => {
-        const div = document.createElement('div');
-        div.className = 'line';
-        div.innerHTML = line;
-        document.getElementById('cv').appendChild(div);
-      });
-
-      // Render Skills
-      document.getElementById('skills').innerHTML = '';
-      sections.skills.forEach(line => {
-        const div = document.createElement('div');
-        div.className = 'line';
-        div.innerHTML = line;
-        document.getElementById('skills').appendChild(div);
-      });
-
-      // Render Experience
-      document.getElementById('experience').innerHTML = '';
-      sections.experience.forEach(line => {
-        const div = document.createElement('div');
-        div.className = 'line';
-        div.innerHTML = line;
-        document.getElementById('experience').appendChild(div);
-      });
-
-      // Render Courses
-      document.getElementById('courses').innerHTML = '';
-      courses.forEach(course => {
-        const div = document.createElement('div');
-        div.className = 'line';
-        div.innerHTML =
-          `<span class="property">"${course.name}"</span>: 
-       <span class="string clickable">"Click for details"</span>,`;
-        document.getElementById('courses').appendChild(div);
-
-        div.querySelector('.clickable').addEventListener('click', () => {
-          modalContent.innerHTML = `<strong>${course.name}</strong><br><strong>${course.date}</strong><p>${course.description}</p>`;
-          modal.style.display = 'flex';
-        });
-      });
-
-      // Render Projects
-      document.getElementById('projects').innerHTML = '';
-      projects.forEach(proj => {
-        const div = document.createElement('div');
-        div.className = 'line';
-        div.innerHTML = `<span class="keyword">Project:</span> <span class="string clickable">${proj.name}</span>`;
-        projectsContainer.appendChild(div);
-
-        div.querySelector('.clickable').addEventListener('click', () => {
-          modalContent.innerHTML = `<strong>${proj.name}</strong><p>${proj.description}</p>`;
-          modal.style.display = 'flex';
-        });
-      });
-
-      // Hide skip button after use
-      document.getElementById('skipAnimation').style.display = 'none';
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key.toLowerCase() === 'k') {
-        alert('Command Palette: Search for anything in this CV...');
-      }
-    });
-
-    console.log("Thanks for reading!");
+    console.log('Thanks for reading!');
   </script>
 </body>
-
 </html>
