@@ -75,6 +75,12 @@ body {
   text-decoration: underline;
 }
 
+/* Highlighted key words in cover letter */
+.highlight {
+  color: #ff8ad9;
+  font-weight: 600;
+}
+
 /* ===== LIGHT THEME (soft grey) ===== */
 
 .theme-light {
@@ -151,7 +157,7 @@ body {
   position: relative;
   background: #111;
   margin-top: 10px;
-  border: 2px solid #ff00d4;
+  border: 2px solid #3b3b3f;
   border-radius: 4px;
   display: none;
   animation: slideDown 0.35s ease;
@@ -169,10 +175,11 @@ body {
 }
 
 .cover-panel-header {
-  background: #ff00d4;
+  background: #3b3b3f;
   padding: 6px 10px;
   display: flex;
   justify-content: flex-start;
+  gap: 8px;
 }
 
 .cover-close {
@@ -181,18 +188,17 @@ body {
   color: white;
   font-weight: 600;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .cover-close:hover {
   text-decoration: underline;
 }
 
-/* Markdown-style content */
+/* Markdown / HTML content */
 .cover-body {
   padding: 15px 20px;
   color: #f0f0f0;
-  line-height: 1.5rem;
   font-size: 0.95rem;
   white-space: pre-wrap;
 }
@@ -201,7 +207,13 @@ body {
 .cover-body h2,
 .cover-body h3 {
   color: #ff66ea;
-  margin-top: 12px;
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.cover-body p {
+  margin: 0 0 2px 0;
+  line-height: 1.28rem;
 }
 
 .cover-body strong {
@@ -237,4 +249,15 @@ body {
   border: none;
   padding: 6px 12px;
   cursor: pointer;
+}
+
+/* Compact spacing for headers & lines */
+.editor-header {
+  padding: 4px 8px !important;
+  margin: 8px 0 4px 0 !important;
+}
+
+.line {
+  margin: 0 !important;
+  padding: 0 !important;
 }
