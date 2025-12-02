@@ -44,7 +44,8 @@
 
   <div id="coverPanel" class="cover-panel">
     <div class="cover-panel-header">
-      <button id="hideCover" class="cover-close">✕ Hide Cover Letter</button>
+      <button id="toggleStyle" class="cover-close">Toggle Style</button>
+      <button id="hideCover" class="cover-close">✕ Hide</button>
     </div>
     <div id="coverContent" class="cover-body markdown"></div>
   </div>
@@ -98,6 +99,7 @@
       personalInfo: [
         '<span class="comment">// === Personal Information ===</span>',
         '<span class="keyword">const</span> name = <span class="string">"Jamar Edwards"</span>;',
+        '<span class="keyword">const</span> Email = <span class="string">"jamar.edw@gmail.com"</span>;',
         '<span class="keyword">const</span> role = <span class="string">"Junior Web Developer"</span>;',
         '<span class="keyword">const</span> location = <span class="string">"Birmingham, West Midlands, UK"</span>;'
       ],
@@ -210,26 +212,89 @@
     const coverContent = document.getElementById('coverContent');
     const hideCover = document.getElementById('hideCover');
     const hoverZone = document.querySelector('.cover-hover-zone');
+    const toggleStyleBtn = document.getElementById('toggleStyle');
 
-    // Inject markdown-style cover letter
-    coverContent.innerHTML = `
+    // ===== Cover Letter Versions =====
+
+    // MARKDOWN version (code-y)
+    const coverLetterMarkdown = `
 # Cover Letter
 
 Dear Hiring Manager,
 
-I am writing to apply for the **Junior Web Designer / Developer** role at Chameleon Web Services. With a strong foundation in front-end web development and hands-on experience using **HTML, CSS, JavaScript, and WordPress**, I am eager to contribute while continuing to grow.
+I’m applying for the Junior Web Designer / Developer role because Chameleon looks like the kind of place where I could genuinely grow. I’ve spent the past year building real projects, improving my HTML, CSS, JavaScript and WordPress skills, and developing a design eye through constant practice.
 
-During my internship with StudioRav, I built responsive websites and implemented features using WordPress and JavaScript. This gave me confidence in turning designs into working solutions for clients.
+During my internship at StudioRav, I helped build responsive WordPress websites and supported project delivery from start to finish. That experience taught me how to take an idea, turn it into a layout, then into a working feature.
 
-My customer service background strengthened my **communication skills**, which helps me explain technical ideas clearly to non-technical audiences.
+My background in customer-facing roles strengthened my communication skills, which helps when explaining technical things clearly and working with clients.
 
-Beyond technical skills, I bring curiosity and adaptability. Projects such as my **AI Assistant (OH7)** and an **ESP32 WiFi/Bluetooth sniffer** reflect my drive to explore new technologies and learn independently.
+Outside of work, I like experimenting with personal projects such as my OH7 AI assistant and small ESP32 tools — they keep me learning and make me a better problem-solver.
 
-Thank you for considering my application. I would welcome the chance to discuss how I can contribute to your team.
+I’d love the opportunity to bring that curiosity, consistency, and growing skillset to your team.
 
-Yours sincerely,  
-**Jamar Edwards**
+Regards,  
+**Jamar Edwards**`;
+
+
+    // HTML / Highlighted version
+    const coverLetterHTML = `
+<h1># Cover Letter</h1>
+
+<p>Dear Hiring Manager,</p>
+
+<p>
+  I am applying for the
+  <span class="highlight">Junior Web Designer / Developer</span>
+  position at
+  <span class="highlight">Chameleon Web Services</span>.
+  I have been actively developing my front-end skills and I'm excited by the chance
+  to learn from an experienced in-house team while contributing to real client projects.
+</p>
+
+<p>
+  I have a strong foundation in
+  <span class="highlight">HTML</span>,
+  <span class="highlight">CSS</span>,
+  <span class="highlight">JavaScript</span>
+  and
+  <span class="highlight">WordPress</span>,
+  alongside growing experience using
+  <span class="highlight">Photoshop</span> and
+  <span class="highlight">Illustrator</span>.
+</p>
+
+<p>
+  During my time with
+  <span class="highlight">StudioRav</span>,
+  I helped build responsive websites and support project deliverables,
+  turning design ideas into working solutions.
+</p>
+
+<p>
+  My customer service background strengthened my
+  <span class="highlight">communication skills</span>,
+  which helps me explain technical ideas clearly to non-technical audiences.
+</p>
+
+<p>
+  Outside of work, I like experimenting with side projects such as my
+  <span class="highlight">AI Assistant (OH7)</span>
+  and an
+  <span class="highlight">ESP32 WiFi/Bluetooth sniffer</span>,
+  which reflect my curiosity and willingness to learn independently.
+</p>
+
+<p>
+  Thank you for considering my application. I would welcome the opportunity to
+  discuss how I can contribute to your team.
+</p>
+
+<p>Yours sincerely,<br />
+<span class="highlight">Jamar Edwards</span></p>
 `;
+
+    let usingHTML = false;
+    coverContent.innerHTML = coverLetterMarkdown; // default view
 
     // Show on hover (easter egg)
     hoverZone.addEventListener('mouseenter', () => {
@@ -239,6 +304,12 @@ Yours sincerely,
     // Hide on click
     hideCover.addEventListener('click', () => {
       coverPanel.style.display = 'none';
+    });
+
+    // Toggle between Markdown and HTML styles
+    toggleStyleBtn.addEventListener('click', () => {
+      usingHTML = !usingHTML;
+      coverContent.innerHTML = usingHTML ? coverLetterHTML : coverLetterMarkdown;
     });
 
     // ==== THEME TOGGLE ====
